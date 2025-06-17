@@ -1,0 +1,132 @@
+{
+  "Column": {
+    "object_count": 3,
+    "available_properties": [
+      "commonFilters",
+      "pandasDataType",
+      "businessName",
+      "isPrimaryKey",
+      "dataClassification",
+      "sampleValues",
+      "parentDatasetContext",
+      "description",
+      "columnName",
+      "nullCount",
+      "sqlUsagePattern",
+      "usageHints",
+      "parentAthenaTableName",
+      "athenaDataType",
+      "foreignKeyInfo",
+      "semanticType",
+      "aggregationPatterns"
+    ],
+    "sample_values": {
+      "commonFilters": "[]",
+      "pandasDataType": "float64",
+      "businessName": "AMSReviewNextDay",
+      "isPrimaryKey": "False",
+      "dataClassification": "Internal",
+      "sampleValues": "['1.0']",
+      "parentDatasetContext": "This is the master table for all customer identity...",
+      "description": "Column AMSReviewNextDay",
+      "columnName": "AMSReviewNextDay",
+      "nullCount": "48",
+      "sqlUsagePattern": "\ud83c\udfaf STRING column | Use single quotes: 'value'",
+      "usageHints": "[]",
+      "parentAthenaTableName": "customer",
+      "athenaDataType": "string",
+      "foreignKeyInfo": "{\"isForeignKey\": false, \"targetTable\": \"\", \"target...",
+      "semanticType": "unknown",
+      "aggregationPatterns": "[]"
+    }
+  },
+  "DatasetMetadata": {
+    "object_count": 3,
+    "available_properties": [
+      "answerableQuestions",
+      "originalFileName",
+      "athenaTableName",
+      "description",
+      "tags",
+      "columnSemanticsConcatenated",
+      "zone",
+      "metadataCreatedAt",
+      "dataLastModifiedAt",
+      "format",
+      "recordCount",
+      "tableName",
+      "businessPurpose",
+      "sourceSystem",
+      "column_objects",
+      "success",
+      "llmHints",
+      "processingStats",
+      "dataOwner"
+    ],
+    "sample_values": {
+      "answerableQuestions": "[]",
+      "originalFileName": "MoveDaily.csv",
+      "athenaTableName": "move_daily",
+      "description": "This is the detailed financial ledger for every op...",
+      "tags": "['Move Operations', 'Pricing Data', 'Financial Tra...",
+      "columnSemanticsConcatenated": "ID (bigint): Primary unique identifier for each da...",
+      "zone": "Raw",
+      "metadataCreatedAt": "2025-06-13 05:03:54.770252+00:00",
+      "dataLastModifiedAt": "2025-05-27 22:16:46+00:00",
+      "format": "CSV",
+      "recordCount": "50",
+      "tableName": "move_daily",
+      "businessPurpose": "Use this dataset for deep financial and profitabil...",
+      "sourceSystem": "Daily Operations & Billing System",
+      "column_objects": "[{'commonFilters': ['WHERE ID IS NOT NULL'], 'pand...",
+      "success": "True",
+      "llmHints": "{\"preferred_aggregations\": [\"COUNT(*) as move_coun...",
+      "processingStats": "{'memoryUsageMB': 0.02, 'leaner_design': True, 'fi...",
+      "dataOwner": "Operations & Finance Team"
+    }
+  },
+  "DataRelationship": {
+    "object_count": 3,
+    "available_properties": [
+      "relationshipId",
+      "fromTableName",
+      "cardinality",
+      "relationshipType",
+      "relationshipName",
+      "toColumn",
+      "fromColumn",
+      "businessMeaning",
+      "toTableName",
+      "suggestedJoinType"
+    ],
+    "sample_values": {
+      "relationshipId": "customer.id->move_daily.moveid",
+      "fromTableName": "customer",
+      "cardinality": "1:many",
+      "relationshipType": "derived_one_to_many",
+      "relationshipName": "customer_to_revenue_chain",
+      "toColumn": "moveid",
+      "fromColumn": "id",
+      "businessMeaning": "Enables customer revenue analysis through customer...",
+      "toTableName": "move_daily",
+      "suggestedJoinType": "LEFT"
+    }
+  },
+  "BusinessContext": {
+    "object_count": 3,
+    "available_properties": [
+      "search_keywords",
+      "examples",
+      "context",
+      "term",
+      "definition"
+    ],
+    "sample_values": {
+      "search_keywords": "['move status', 'job progress', 'where is my move'...",
+      "examples": "Plain Language Question: 'Count how many moves are...",
+      "context": "\n- **Core Concept:** This provides visibility into...",
+      "term": "Operational Workflow & Move Status",
+      "definition": "Track the real-time status and progress of a move ..."
+    }
+  }
+}
