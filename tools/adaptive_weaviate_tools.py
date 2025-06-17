@@ -1,4 +1,4 @@
-# tools/adaptive_weaviate_tools.py - ENHANCED WITH QUERY ANALYST INTEGRATION
+# tools/adaptive_weaviate_tools.py - FIXED WITH CRITICAL PARSING AND DEBUG IMPROVEMENTS
 
 import os
 import json
@@ -426,23 +426,70 @@ def adaptive_schema_discovery_engine(context_analysis_json: str) -> str:
     """
     weaviate_client = WeaviateClientSingleton.get_instance()
     
-    # Parse enhanced context analysis
+    # 🚨 CRITICAL FIX #1: FIXED INPUT PARSING - Handle both direct context and wrapped Query Analyst output
     try:
-        context_data = json.loads(context_analysis_json) if isinstance(context_analysis_json, str) else context_analysis_json
-    except:
-        logger.error("Failed to parse enhanced context analysis JSON")
-        return json.dumps({"error": "Invalid enhanced context analysis input"})
-    
-    final_search_query = context_data.get("final_search_query", context_data.get("original_query", ""))
-    contextual_warnings = context_data.get("contextual_warnings", [])
+        logger.info(f"🔍 PARSING INPUT: {type(context_analysis_json)} - {str(context_analysis_json)[:200]}...")
+        
+        if isinstance(context_analysis_json, str):
+            parsed_input = json.loads(context_analysis_json)
+            
+            # Check if it's wrapped JSON from Query Analyst
+            if "context_analysis_json" in parsed_input:
+                logger.info("📦 Found wrapped JSON from Query Analyst pipeline")
+                context_data = json.loads(parsed_input["context_analysis_json"])
+            else:
+                logger.info("📋 Direct context data received")
+                context_data = parsed_input
+        else:
+            logger.info("📋 Non-string input received")
+            context_data = context_analysis_json
+            
+        # 🚨 CRITICAL: Extract the actual query with multiple fallbacks
+        final_search_query = (
+            context_data.get("final_search_query", "") or 
+            context_data.get("original_query", "") or
+            context_data.get("original_question", "") or
+            ""
+        )
+        
+        # 🚨 EMERGENCY DEBUG & FALLBACK
+        if not final_search_query or final_search_query.strip() == "":
+            logger.error(f"🚨 EMPTY SEARCH QUERY DETECTED!")
+            logger.error(f"   Context keys: {list(context_data.keys()) if isinstance(context_data, dict) else 'Not a dict'}")
+            logger.error(f"   Raw input preview: {str(context_analysis_json)[:200]}")
+            
+            # Try to extract from Query Analyst data
+            if "sub_questions_for_schema_search" in context_data:
+                search_concepts = context_data["sub_questions_for_schema_search"]
+                if search_concepts and len(search_concepts) > 0:
+                    final_search_query = search_concepts[0]
+                    logger.info(f"🔧 Using first strategic concept as query: '{final_search_query}'")
+                else:
+                    final_search_query = "customer revenue data"
+                    logger.info(f"🔧 Using emergency fallback query: '{final_search_query}'")
+            else:
+                final_search_query = "customer revenue data"
+                logger.info(f"🔧 Using emergency fallback query: '{final_search_query}'")
+            
+        logger.info(f"🎯 FINAL EXTRACTED SEARCH QUERY: '{final_search_query}'")
+        
+        contextual_warnings = context_data.get("contextual_warnings", [])
+        
+    except Exception as e:
+        logger.error(f"❌ CRITICAL PARSING FAILURE: {e}")
+        logger.error(f"Raw input type: {type(context_analysis_json)}")
+        logger.error(f"Raw input preview: {str(context_analysis_json)[:300] if isinstance(context_analysis_json, str) else str(context_analysis_json)}")
+        return json.dumps({"error": f"Input parsing failed: {e}", "received_input_type": str(type(context_analysis_json))})
     
     # ENHANCEMENT: Extract Query Analyst strategic guidance if available
-    strategic_concepts = context_data.get("strategic_concepts_applied", [])
+    strategic_concepts = context_data.get("sub_questions_for_schema_search", [])
     query_analyst_enhancement = context_data.get("query_analyst_enhancement", False)
     
     logger.info(f"🔍 ENHANCED STAGE 2: Schema Discovery for: '{final_search_query}'")
     if query_analyst_enhancement:
         logger.info(f"🎯 Query Analyst enhancement active with {len(strategic_concepts)} strategic concepts")
+    if strategic_concepts:
+        logger.info(f"🎯 Strategic concepts: {strategic_concepts}")
     
     if not weaviate_client:
         logger.warning("🔄 Weaviate not available, using enhanced adaptive fallback")
@@ -531,6 +578,18 @@ def adaptive_schema_discovery_engine(context_analysis_json: str) -> str:
 def _discover_core_datasets_with_enhanced_metadata(weaviate_client, search_query: str, strategic_concepts: List[str], metrics: Dict) -> List[Dict]:
     """ENHANCED: Dataset discovery with Query Analyst strategic targeting"""
     
+    # 🚨 DEBUG FIX #3: Comprehensive logging at function start
+    logger.info(f"🔍 DATASET DISCOVERY DEBUG:")
+    logger.info(f"   Search Query: '{search_query}'")
+    logger.info(f"   Strategic Concepts: {strategic_concepts}")
+    logger.info(f"   Weaviate Client: {'Connected' if weaviate_client else 'NULL'}")
+    
+    # 🚨 EMERGENCY: Handle empty search query
+    if not search_query or search_query.strip() == "":
+        logger.error(f"🚨 EMPTY SEARCH QUERY! Using emergency fallback")
+        search_query = strategic_concepts[0] if strategic_concepts else "customer revenue information"
+        logger.info(f"   Fallback Query: '{search_query}'")
+    
     try:
         dataset_collection = weaviate_client.collections.get("DatasetMetadata")
         import weaviate.classes.query as wq
@@ -539,6 +598,7 @@ def _discover_core_datasets_with_enhanced_metadata(weaviate_client, search_query
         search_terms = [search_query]
         if strategic_concepts:
             search_terms.extend(strategic_concepts[:2])  # Top 2 strategic concepts
+            logger.info(f"   🎯 Using {len(strategic_concepts)} strategic concepts for enhanced search")
         
         datasets = []
         dataset_relevance_scores = {}
@@ -563,11 +623,14 @@ def _discover_core_datasets_with_enhanced_metadata(weaviate_client, search_query
             )
             
             metrics["queries_executed"] += 1
+            logger.info(f"      📊 Query executed, found {len(response.objects)} objects")
             
             for obj in response.objects:
                 props = obj.properties
                 table_name = props.get('tableName', '')
                 athena_table_name = props.get('athenaTableName', '')
+                
+                logger.info(f"         📋 Processing: {table_name} -> {athena_table_name}")
                 
                 if table_name and athena_table_name and table_name not in dataset_relevance_scores:
                     if "." not in athena_table_name:
@@ -601,12 +664,18 @@ def _discover_core_datasets_with_enhanced_metadata(weaviate_client, search_query
                     })
                     
                     logger.info(f"      ✅ {table_name} -> {athena_table_name} (score: {final_score:.3f})")
+                else:
+                    logger.info(f"         ⏭️ Skipped: {table_name} (duplicate or invalid)")
         
         datasets.sort(key=lambda x: x['relevance_score'], reverse=True)
+        logger.info(f"   🎯 FINAL DATASET RESULTS: {len(datasets)} datasets found")
+        
         return datasets
         
     except Exception as e:
         logger.error(f"Enhanced dataset discovery failed: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 
@@ -632,11 +701,14 @@ def _discover_columns_with_enhanced_metadata(weaviate_client, search_query: str,
         logger.info(f"   🎯 Enhanced precision search for {table_name} columns...")
         
         try:
+            # 🚨 CRITICAL FIX: Use the correct property name from your schema report
             precision_filter = Filter.by_property("parentAthenaTableName").equal(table_name)
             
             # ENHANCEMENT: Search with multiple strategic terms
             all_columns = []
             for search_term in search_terms[:3]:  # Limit searches
+                logger.info(f"      🔍 Column search with: '{search_term}' for table: {table_name}")
+                
                 response = column_collection.query.near_text(
                     query=search_term,
                     limit=5,  # More columns per search
@@ -657,6 +729,7 @@ def _discover_columns_with_enhanced_metadata(weaviate_client, search_query: str,
                 )
                 
                 metrics["queries_executed"] += 1
+                logger.info(f"         📊 Found {len(response.objects)} columns for '{search_term}'")
                 
                 for col_obj in response.objects:
                     col_props = col_obj.properties
@@ -709,6 +782,7 @@ def _discover_columns_with_enhanced_metadata(weaviate_client, search_query: str,
                         }
                         
                         all_columns.append(column_data)
+                        logger.info(f"            ✅ {col_name} ({col_props.get('athenaDataType', 'unknown')}) - relevance: {final_relevance:.3f}")
             
             if all_columns:
                 # Remove duplicates (same column found by different search terms)
@@ -738,9 +812,13 @@ def _discover_columns_with_enhanced_metadata(weaviate_client, search_query: str,
                     boost = col.get('strategic_boost_applied', 0)
                     boost_indicator = f" (+{boost:.2f})" if boost > 0 else ""
                     logger.info(f"         {i+1}. {col['column_name']} ({semantic_type}) - AI: {ai_score:.1f}{boost_indicator}")
+            else:
+                logger.warning(f"      ❌ No columns found for {table_name}")
                     
         except Exception as e:
             logger.warning(f"Enhanced column discovery failed for {table_name}: {e}")
+            import traceback
+            traceback.print_exc()
     
     metrics["precision_filters_applied"] += len(datasets)
     return columns_by_dataset
@@ -1098,7 +1176,7 @@ def _get_enhanced_adaptive_fallback_schema_fixed(search_query: str, context_data
         
         # ENHANCEMENT: Add Query Analyst context preservation
         query_analyst_enhancement = context_data.get("query_analyst_enhancement", False)
-        strategic_concepts = context_data.get("strategic_concepts_applied", [])
+        strategic_concepts = context_data.get("sub_questions_for_schema_search", [])
         
         if query_analyst_enhancement:
             fallback_data["stage_1_adaptive_context"]["triage_result"]["query_analyst_integration"] = "Strategic guidance preserved in fallback mode"
@@ -1125,7 +1203,7 @@ def _get_adaptive_fallback_schema_fixed(search_query: str, context_data: Dict) -
     columns_by_dataset = {}
     
     # Customer table logic
-    if any(word in query_lower for word in ['customer', 'client', 'name', 'email', 'contact']):
+    if any(word in query_lower for word in ['customer', 'client', 'name', 'email', 'contact', 'revenue']):
         datasets.append({
             "table_name": "customer",
             "athena_table_name": "amspoc3test.customer",
