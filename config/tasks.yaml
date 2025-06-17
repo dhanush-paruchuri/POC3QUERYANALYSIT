@@ -39,8 +39,9 @@ adaptive_context_task:
     - Apply "key_entities" and "predicted_schema_fields" for precision filtering
     - Leverage "primary_intent" and "complexity_assessment" for optimization
     
-    🎯 STAGE 1: ENHANCED ADAPTIVE CONTEXT ANALYSIS
-    Use "Adaptive Business Context Analyzer" with question: '{question}'
+   🎯 STAGE 1: ENHANCED ADAPTIVE CONTEXT ANALYSIS  
+    STEP 1: Use "Adaptive Business Context Analyzer" with question: '{question}'
+    STEP 2: Use "Adaptive Schema Discovery Engine" with the Stage 1 results
     
     ENHANCED WITH QUERY ANALYST PLAN:
     - Prioritize search terms from "sub_questions_for_schema_search"
