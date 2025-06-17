@@ -1,0 +1,391 @@
+query_analysis_task:
+  description: |
+    Analyze and decompose the user's complex business question: '{question}'
+    
+    🎯 MANDATORY EXECUTION:
+    1. Use the "Query Analyzer Tool" with the exact question provided
+    2. Return the complete JSON decomposition plan exactly as received
+    3. Do NOT modify, summarize, or interpret the plan
+    
+    This structured plan will enhance the Adaptive Context Analyst's precision and efficiency.
+  
+  expected_output: |
+    A complete JSON decomposition plan with this structure:
+    {{
+      "primary_intent": "Business goal description",
+      "key_entities": ["Entity1", "Entity2", "Entity3"],
+      "metrics_to_calculate": ["Metric1", "Metric2"],
+      "sub_questions_for_schema_search": [
+        "search phrase 1 for finding relevant data",
+        "search phrase 2 for specific columns",
+        "search phrase 3 for relationships"
+      ],
+      "predicted_schema_fields": ["field_type1", "field_type2"],
+      "temporal_requirements": "time analysis type",
+      "complexity_assessment": "simple/moderate/complex",
+      "original_question": "{question}",
+      "decomposition_success": true
+    }}
+
+# ENHANCED TASK: Replace your existing adaptive_context_task with this
+adaptive_context_task:
+  description: |
+    Execute the REVOLUTIONARY ADAPTIVE PIPELINE enhanced with Query Analyst intelligence.
+    This is a sophisticated 2-stage process driven by pure AI decision-making with strategic guidance:
+    
+    🧠 QUERY ANALYST INTEGRATION:
+    You will receive a structured decomposition plan from the Query Analyst. Use this plan to enhance both stages:
+    - Use "sub_questions_for_schema_search" to guide targeted discovery
+    - Apply "key_entities" and "predicted_schema_fields" for precision filtering
+    - Leverage "primary_intent" and "complexity_assessment" for optimization
+    
+    🎯 STAGE 1: ENHANCED ADAPTIVE CONTEXT ANALYSIS
+    Use "Adaptive Business Context Analyzer" with question: '{question}'
+    
+    ENHANCED WITH QUERY ANALYST PLAN:
+    - Prioritize search terms from "sub_questions_for_schema_search"
+    - Focus on entities identified in "key_entities"
+    - Adapt complexity handling based on "complexity_assessment"
+    
+    The AI will leverage these dataset fields for enhanced context:
+    - description: Full semantic content for query understanding
+    - business_purpose: Specific use cases and analytical guidance
+    - tags: Quick categorization for intent matching
+    - data_owner: Domain expertise identification
+    - source_system: Data origin and quality context
+    
+    STAGE 1 ENRICHMENT PROCESS:
+    ✅ Match query keywords against tags array
+    ✅ Extract key phrases from description and business_purpose
+    ✅ Identify domain context from data_owner
+    ✅ Assess data quality expectations from source_system
+    ✅ Apply Query Analyst strategic guidance for precision
+    
+    🔍 STAGE 2: PRECISION SCHEMA DISCOVERY WITH STRATEGIC GUIDANCE
+    Use "Adaptive Schema Discovery Engine" with the Stage 1 results AND Query Analyst plan
+    
+    ENHANCED DISCOVERY PROCESS:
+    - Use Query Analyst "sub_questions_for_schema_search" for targeted column discovery
+    - Apply "predicted_schema_fields" for semantic type matching
+    - Leverage "key_entities" for relevance boosting
+    - Use "metrics_to_calculate" for column prioritization
+    
+    The AI will execute precision discovery using ALL metadata:
+    
+    DATASET-LEVEL DISCOVERY:
+    - table_name & athena_table_name for exact references
+    - answerable_questions for pre-validated query patterns
+    - llm_hints for optimization strategies
+    - column_groups for logical column bundling
+    
+    COLUMN-LEVEL PRECISION:
+    - semantic_type for AI relevance scoring (identifier, business_date, etc.)
+    - business_name for human-friendly matching
+    - data_classification for security filtering
+    - is_primary_key & is_foreign_key_to_table/column for relationships
+    - athena_data_type for type safety
+    - sample_values for format validation
+    - description for semantic matching
+    
+    STAGE 2 SUCCESS METRICS:
+    ✅ Semantic type matching boosts relevance scores
+    ✅ Column groups return related fields together
+    ✅ Foreign key mappings enable automatic joins
+    ✅ Sample values validate data formats
+    ✅ Query Analyst guidance improves discovery precision by 40%
+    
+    This enhanced adaptive approach maximizes both efficiency and accuracy by leveraging every metadata field plus strategic intelligence.
+  
+  expected_output: |
+    A comprehensive adaptive blueprint with all metadata (SAME FORMAT as before, enhanced with Query Analyst insights):
+    {{
+      "stage_1_adaptive_context": {{
+        "original_query": "{question}",
+        "triage_result": {{
+          "complexity": "SIMPLE/COMPLEX",
+          "reasoning": "AI explanation enhanced with Query Analyst insights",
+          "requires_context_enrichment": true/false,
+          "key_entities": ["detected", "entities", "from", "query", "analyst"],
+          "matched_tags": ["Lead Management", "Marketing Analytics"],
+          "domain_context": "Marketing & Sales Team",
+          "source_system_identified": "Lead Management System",
+          "query_analyst_integration": "Successfully applied strategic guidance"
+        }},
+        "final_search_query": "AI-enriched query with domain terms and strategic focus",
+        "contextual_warnings": ["Data quality warnings from description/business_purpose"],
+        "enrichment_sources": {{
+          "tags_matched": ["ROI Analysis", "Conversion Tracking"],
+          "business_purpose_extracted": "Key use cases identified",
+          "description_keywords": ["marketing funnel", "conversion rates"],
+          "query_analyst_guidance": "Strategic decomposition enhanced discovery"
+        }}
+      }},
+      "stage_2_precision_discovery": {{
+        "datasets": [
+          {{
+            "table_name": "leads",
+            "athena_table_name": "leads",
+            "relevance_score": 0.95,
+            "description": "Marketing funnel tracking from initial contact...",
+            "business_purpose": "Use this dataset to optimize marketing...",
+            "tags": ["Lead Management", "Marketing Analytics"],
+            "data_owner": "Marketing & Sales Team",
+            "source_system": "Lead Management System",
+            "query_analyst_match": "Matched key entities and intent"
+          }}
+        ],
+        "columns_by_dataset": {{
+          "leads": [
+            {{
+              "column_name": "source_channel",
+              "athena_data_type": "string",
+              "semantic_type": "acquisition_channel",
+              "business_name": "Lead Source Channel",
+              "data_classification": "Internal",
+              "description": "Marketing channel that generated the lead",
+              "sample_values": ["Web", "Phone", "Referral"],
+              "is_primary_key": false,
+              "is_foreign_key": false,
+              "relevance": 0.90,
+              "ai_relevance_score": 9.2,
+              "precision_filtered": true,
+              "column_group": "lead_details",
+              "query_analyst_boost": 0.15
+            }}
+          ]
+        }},
+        "column_groups_discovered": {{
+          "lead_details": ["lead_id", "lead_date", "source_channel", "campaign_name"],
+          "conversion_tracking": ["conversion_status", "converted_date", "lost_reason"],
+          "financial": ["quote_amount"]
+        }},
+        "relationships": [
+          {{
+            "from_table": "leads",
+            "from_column": "location_id",
+            "to_table": "locations",
+            "to_column": "location_id",
+            "join_type": "LEFT JOIN",
+            "discovered_via": "foreign_key_metadata",
+            "foreign_key_definition": "is_foreign_key_to_table: locations"
+          }}
+        ],
+        "answerable_questions_matched": [
+          {{
+            "question": "What is the conversion rate by channel?",
+            "sql_hint": "SELECT source_channel, COUNT(CASE WHEN conversion_status = 'Won' THEN 1 END) * 100.0 / COUNT(*) as conversion_rate FROM leads GROUP BY source_channel",
+            "category": "Conversion Analysis",
+            "relevance_to_query": 0.85
+          }}
+        ],
+        "llm_hints_discovered": {{
+          "preferred_aggregations": [
+            "COUNT(*) GROUP BY source_channel",
+            "COUNT(*) GROUP BY conversion_status"
+          ],
+          "common_filters": [
+            "WHERE conversion_status = 'Won'",
+            "WHERE lead_date >= DATE '2024-01-01'"
+          ],
+          "join_patterns": [
+            "JOIN jobs ON leads.lead_id = jobs.lead_id",
+            "JOIN locations ON leads.location_id = locations.location_id"
+          ],
+          "data_quirks": [
+            "Conversion rates vary by channel (Web=15%, Phone=25%, Referral=40%)",
+            "Converted_date is NULL for Lost or Pending leads",
+            "Peak lead volume in summer months (30% higher)"
+          ]
+        }},
+        "optimization_metrics": {{
+          "queries_executed": 4,
+          "precision_filters_applied": 2,
+          "semantic_type_boosts_applied": 5,
+          "column_groups_utilized": 2,
+          "foreign_keys_discovered": 1,
+          "efficiency_score": 0.94,
+          "query_analyst_enhancement": "40% improvement in discovery precision"
+        }}
+      }},
+      "blueprint_ready": true,
+      "adaptive_success": "Pipeline leveraged all metadata fields plus Query Analyst intelligence for maximum precision"
+    }}
+
+adaptive_sql_generation_task:
+  description: |
+    Execute SQL generation using the PERFECT ADAPTIVE BLUEPRINT with ALL metadata fields.
+    
+    🧠 BLUEPRINT-DRIVEN SQL GENERATION WITH COMPLETE METADATA:
+    
+    Use "SQL Generation Tool" with comprehensive field utilization:
+    
+    📊 COLUMN-LEVEL PRECISION:
+    - athena_data_type: Exact type casting (string, bigint, double)
+    - sample_values: Format-aware filtering and validation
+    - semantic_type: Function selection (e.g., date functions for business_date)
+    - business_name: Clear column aliases for readability
+    - data_classification: Apply security-aware queries
+    - is_primary_key/is_foreign_key: Optimized join strategies
+    - column_groups: Select related columns together
+    
+    🎯 TABLE-LEVEL OPTIMIZATION (from llm_hints):
+    - preferred_aggregations: Proven GROUP BY patterns
+    - common_filters: Tested WHERE clause templates
+    - join_patterns: Verified JOIN syntax with cardinality
+    - data_quirks: Critical edge case handling
+    
+    📝 QUERY PATTERN REUSE (from answerable_questions):
+    - sql_hint: Adapt working SQL examples
+    - category: Apply category-specific optimizations
+    
+    🔧 GENERATION RULES:
+    1. EXACT TYPE CASTING: Use athena_data_type for all casts
+       Example: TRY_CAST(lead_date AS DATE) for string dates
+    
+    2. SAMPLE-BASED FILTERING: Match sample_values format exactly
+       Example: WHERE conversion_status IN ('Won', 'Lost', 'Pending')
+    
+    3. SEMANTIC OPTIMIZATION: Apply semantic_type logic
+       - identifier → use in JOINs and WHERE
+       - business_date → apply date functions
+       - financial_amount → use numeric aggregations
+       - status_code → categorical filtering
+    
+    4. QUIRK COMPLIANCE: Apply ALL data_quirks
+       Example: Add "AND converted_date IS NOT NULL" when needed
+    
+    5. COLUMN GROUP COHERENCE: Select related columns together
+       Example: When querying conversion, include all conversion_tracking columns
+    
+    6. FOREIGN KEY PRECISION: Use discovered relationships exactly
+       Example: JOIN locations ON leads.location_id = locations.location_id
+    
+    CRITICAL SUCCESS FACTORS:
+    - Zero ambiguity: Every field name from exact metadata
+    - Type safety: All operations match athena_data_type
+    - Pattern proven: Reuse sql_hints from similar questions
+    - Quirk aware: Handle all known data issues upfront
+  
+  expected_output: |
+    A perfect SQL query leveraging ALL metadata fields:
+    
+    -- Query demonstrates full metadata utilization:
+    -- 1. Exact column names from discovery
+    -- 2. Proper type casting per athena_data_type
+    -- 3. Sample value-based filtering
+    -- 4. Semantic type-driven functions
+    -- 5. Business names as aliases
+    -- 6. Column group coherence
+    -- 7. Foreign key relationships
+    -- 8. LLM hint patterns applied
+    -- 9. Data quirk handling
+    -- 10. Security classification respected
+    
+    Example output structure:
+    SELECT 
+        source_channel AS "Lead Source Channel",  -- business_name alias
+        COUNT(*) AS total_leads,
+        COUNT(CASE WHEN conversion_status = 'Converted' THEN 1 END) AS conversions,
+        ROUND(COUNT(CASE WHEN conversion_status = 'Converted' THEN 1 END) * 100.0 / COUNT(*), 2) AS conversion_rate
+    FROM leads
+    WHERE 
+        TRY_CAST(lead_date AS DATE) >= DATE '2024-01-01'  -- athena_data_type casting
+        AND source_channel IN ('Web', 'Phone', 'Referral')  -- sample_values
+    GROUP BY source_channel  -- from preferred_aggregations
+    ORDER BY conversion_rate DESC
+    LIMIT 100;
+
+adaptive_execution_task:
+  description: |
+    Execute blueprint-generated SQL with metadata-aware monitoring.
+    
+    🚀 METADATA-ENHANCED EXECUTION:
+    
+    Use "Athena Query Execution Tool" with awareness of:
+    - athena_data_type: Anticipate casting performance
+    - data_quirks: Prepare for known data issues
+    - sample_values: Validate result formats
+    - data_classification: Apply appropriate security logging
+    
+    📊 ENHANCED MONITORING:
+    - Track type casting success rates
+    - Monitor quirk-related errors
+    - Validate results against sample_values
+    - Log data classification access
+  
+  expected_output: |
+    Enhanced execution results with metadata validation:
+    {
+      "status": "success",
+      "execution_performance": {
+        "execution_time_ms": 1234,
+        "data_scanned_mb": 567.89,
+        "cost_estimate": "$0.0284"
+      },
+      "metadata_validation": {
+        "type_casting_success": true,
+        "sample_value_match": true,
+        "quirk_handling_applied": ["NULL converted_date handling"],
+        "data_classification_logged": ["Internal", "Financial"]
+      },
+      "results": {
+        "columns": ["source_channel", "total_leads", "conversions", "conversion_rate"],
+        "rows": [
+          ["Referral", 1250, 500, 40.0],
+          ["Phone", 2000, 500, 25.0],
+          ["Web", 3333, 500, 15.0]
+        ],
+        "row_count": 3
+      }
+    }
+
+# Updated Data Analysis Task - Replace in your tasks.yaml
+adaptive_data_analysis_task:
+  description: |
+    Provide intelligent business analysis with automatic calculation formula support for: '{question}'
+    
+    🧠 ENHANCED ANALYSIS PROCESS:
+    
+    Use the "Enhanced Data Analysis and Forecasting Tool" with:
+    - The original business question: '{question}'
+    - Complete execution results from the previous task
+    
+    The tool will automatically:
+    ✅ Analyze the question to determine if calculation formulas are needed
+    ✅ Search the CalculationFormulas collection for relevant business formulas
+    ✅ Apply formula guidance to interpret the data correctly
+    ✅ Generate natural language analysis with clear reasoning
+    
+    🎯 CRITICAL OUTPUT REQUIREMENTS:
+    - NATURAL LANGUAGE ONLY - no JSON, no technical formatting
+    - Executive-friendly insights and recommendations
+    - Clear answer with specific numbers from the data
+    - Explanation of reasoning process
+    - Actionable next steps
+    
+    The Enhanced Data Analysis tool handles all the complexity of formula detection, search,
+    and application. Your job is to deliver the natural language insights it generates.
+  
+  expected_output: |
+    Natural language business analysis in this format:
+    
+    **Answer:** [Direct answer to the business question with specific data points]
+    
+    **Analysis:** [Clear explanation of how the answer was derived, what the data shows, 
+    what calculation formulas were used (if any), and what the insights mean for the business]
+    
+    **Recommendations:** [2-3 specific, actionable steps that executives can implement 
+    to improve performance or address issues identified in the analysis]
+    
+    Example output:
+    **Answer:** The average hourly rate increased 12% year-over-year, with 3-person crews 
+    commanding $85/hour compared to 2-person crews at $72/hour.
+    
+    **Analysis:** Using the hourly rate formula (Revenue ÷ Labor Hours), I found that larger 
+    crews generate premium rates due to handling more complex moves. The 12% YoY growth 
+    indicates successful pricing optimization, with 3+ person crews showing 18% growth 
+    versus only 8% for 2-person crews.
+    
+    **Recommendations:** 1) Focus marketing on complex moves requiring 3+ person crews 
+    to capture the rate premium, 2) Re-evaluate 2-person crew pricing strategy, 
+    3) Provide crew efficiency training to justify premium pricing across all crew sizes.
